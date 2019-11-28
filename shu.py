@@ -49,12 +49,12 @@ class Node:
             return None
         elif self.key < key:
             if self.right:
-                return self.right.find(key)
+                return self.right.find_father(key)
             else:
                 return self
         else:
             if self.left:
-                return self.left.find(key)
+                return self.left.find_father(key)
             else:
                 return self
 

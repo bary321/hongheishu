@@ -4,6 +4,13 @@ from honghei_err import *
 
 __author__ = 'bary'
 
+__doc__ = """
+    根据 https://www.jianshu.com/p/e136ec79235c 
+    编程实现红黑树
+    
+    mail: 784378814@qq.com
+"""
+
 
 class Node(_Node):
     father = None  # type Node
@@ -74,55 +81,111 @@ class Tree:
         pass
 
     def insert(self, key):
+        # 根节点为空，直接插入
+        # 情景1
         if not self.root:
             self.root = Node(key)
             self.root.black = True
-            return self.root
+            return
         father = self.root.find_father(key)
-        uncle = None
         insert_node = Node(key, father)
+        insert_node.father = father
 
-        if father.black:
-            if father.key < key:
-                father.right = insert_node
-                return father.right
-            else:
-                father.left = insert_node
-                return father.left
+        # 当key已经存在时，father为空
         if not father:
-            return None
+            return
+        if father.key < key:
+            father.right = insert_node
 
-        while father is not self.root or not father:
+        else:
+            father.left = insert_node
+
+        # 如果插入节点的父节点为黑，直接插入
+        # 情景3
+        if father.black:
+            return
+
+        # 插入节点是红色的
+        # 情景4
+        while father is not self.root and father:
             grandfather = father.father  # type: Node
             is_left = True
+            # 找到叔叔节点
             if grandfather.left is father:
                 uncle = grandfather.right
             else:
                 is_left = False
                 uncle = grandfather.left
+
             if uncle and not uncle.black:
+                # 叔叔不为空并且是红的
+                # 情景4.1
                 father.black = True
                 uncle.black = True
                 grandfather.black = False
+                insert_node = grandfather
                 father = grandfather.father
             else:
+                # 叔叔为空或者是黑的
+                # 我认为叔叔必然是空的，否则似乎树不可能满足性质5
+
                 if is_left:
+                    # 父节点在左边
+                    # 情景4.2
                     if father.left is insert_node:
+                        # 插入节点在左边
+                        # 情景4.2.1
                         father.black = True
                         grandfather.black = False
-                        if grandfather.father:
-                            grandfather.father = right_single_rotate(grandfather)
+                        # 在太爷那替换grandfather
+                        grandgrandfather = grandfather.father
+                        if grandgrandfather:
+                            if grandfather is grandgrandfather.left:
+                                grandgrandfather.left = right_single_rotate(grandfather)
+                            else:
+                                grandgrandfather.right = right_single_rotate(grandfather)
                         else:
                             self.root = right_single_rotate(grandfather)
+                        break
                     else:
+                        # 插入节点在右边
+                        # 情景4.2.2
                         grandfather.left = left_single_rotate(father)
-                        insert_node = father
+                        tmp = father
                         father = insert_node
+                        insert_node = tmp
+                        continue
+                else:
+                    # 父节点在右边
+                    # 情景4.3
+                    if father.right is insert_node:
+                        # 插入节点在右边
+                        # 情景4.3.1
+                        father.black = True
+                        grandfather.black = False
+                        # 在太爷那替换grandfather
+                        grandgrandfather = grandfather.father
+                        if grandgrandfather:
+                            if grandfather is grandgrandfather.left:
+                                grandgrandfather.left = left_single_rotate(grandfather)
+                            else:
+                                grandgrandfather.right = left_single_rotate(grandfather)
+                        else:
+                            self.root = right_single_rotate(grandfather)
+                        break
+                    else:
+                        # 插入节点在左边
+                        # 情景4.3.2
+                        grandfather.right = right_single_rotate(father)
+                        tmp = father
+                        father = insert_node
+                        insert_node = tmp
                         continue
 
             # father = grandfather
-
-            self.root.black = True  # 根节点一定是黑色的
+        # 确保根节点满足性质2
+        self.root.black = True  # 根节点一定是黑色的
+        return
 
     def is_none(self):
         if self.root:
@@ -214,7 +277,9 @@ def _check_length(node):
         else:
             return left_length
 
-    if not node.left or not node.black:
+    if node.left and node.right:
+        return left_length
+    else:
         length = get_length(node)
         if left_length:
             if length != left_length:
