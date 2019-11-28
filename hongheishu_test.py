@@ -37,6 +37,9 @@ class MyTestCase(unittest.TestCase):
         self.assertEqual(get_length(tree.left), get_length(tree.right.left))
         tree.right.right.black = True
         self.assertRaises(LengthException, check_length, t)
+        tree.right.black = False
+        show_tree(tree)
+        self.assertRaises(HongChild, hong_child_black, tree)
 
 
 if __name__ == '__main__':

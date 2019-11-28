@@ -1,12 +1,8 @@
 # coding:utf-8
 from shu import Node as _Node
+from honghei_err import *
 
 __author__ = 'bary'
-
-
-class LengthException(Exception):
-    def __init__(self, err='length not equal'):
-        Exception.__init__(self, err)
 
 
 class Node(_Node):
@@ -151,6 +147,43 @@ class Tree:
             return self.root.find_max()
         else:
             return None
+
+
+# 用来检查红黑树是否满足性质
+def xingzhijiancha(tree):
+    """
+
+    @type tree: Tree
+    """
+    # 性质2：根节点是黑的
+    if tree.root:
+        if tree.root.black != True:
+            raise RootNoBlack
+        hong_child_black(tree.root)
+        check_length(tree)
+    else:
+        return
+
+
+# 性质4：如果一个节点是红色的，那它的子节点一定是黑的
+def hong_child_black(node):
+    """
+
+    @type node: Node
+    """
+    if not node.black:
+        if node.left:
+            if not node.left.black:
+                print "node:", node.key, "child not black"
+                raise HongChild
+        if node.right:
+            if not node.left.black:
+                print "node:", node.key, "child not black"
+                raise HongChild
+    if node.left:
+        hong_child_black(node.left)
+    if node.right:
+        hong_child_black(node.right)
 
 
 def check_length(tree):
