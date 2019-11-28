@@ -154,7 +154,10 @@ def _show_tree(tree, graph):
     if tree.left:
         _show_tree(tree.left, graph)
         add_left = True
-    graph.add_node(tree.key)
+    if not tree.black:
+        graph.add_node(tree.key, color='red')
+    else:
+        graph.add_node(tree.key)
     if add_left:
         graph.add_edge(tree.key, tree.left.key)
     if tree.right:
