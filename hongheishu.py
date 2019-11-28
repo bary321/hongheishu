@@ -4,6 +4,11 @@ from shu import Node as _Node
 __author__ = 'bary'
 
 
+class LengthException(Exception):
+    def __init__(self, err='length not equal'):
+        Exception.__init__(self, err)
+
+
 class Node(_Node):
     father = None  # type Node
 
@@ -119,7 +124,6 @@ class Tree:
                         father = insert_node
                         continue
 
-
             # father = grandfather
 
             self.root.black = True  # 根节点一定是黑色的
@@ -149,8 +153,65 @@ class Tree:
             return None
 
 
-def check_length():
-    pass
+def check_length(tree):
+    """
+
+    @type tree: Tree
+    """
+    node = tree.root
+    _check_length(node)
+
+
+def _check_length(node):
+    """
+
+    @type length: int
+    @type node: Node
+    """
+    left_length = 0
+    right_length = 0
+    if node.left:
+        left_length = _check_length(node.left)
+    if node.right:
+        right_length = _check_length(node.right)
+    if left_length and right_length:
+        if left_length != right_length:
+            print left_length, "!=", right_length, "key:", node.key
+            raise LengthException()
+        else:
+            return left_length
+
+    if not node.left or not node.black:
+        length = get_length(node)
+        if left_length:
+            if length != left_length:
+                print left_length, "!=", length, "key:", node.key
+                raise LengthException()
+            else:
+                return left_length
+        if right_length:
+            if length != right_length:
+                print right_length, "!=", length, "key:", node.key
+                raise LengthException()
+            else:
+                return right_length
+        return length
+
+
+def get_length(node):
+    """
+
+    @type node: Node
+    """
+    length = 0
+    if node.black:
+        length += 1
+    while node.father:
+        node = node.father
+        if node.black:
+            length += 1
+    return length
+
 
 def insert(node, key):
     """
