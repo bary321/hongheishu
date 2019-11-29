@@ -30,6 +30,8 @@ def left_single_rotate(node):
     rchild = node.right
     if rchild:
         node.right = rchild.left
+        if node.right:
+            node.right.father = node
         node.father = rchild
         rchild.father = father
         rchild.left = node
@@ -47,6 +49,8 @@ def right_single_rotate(node):
     lchild = node.left
     if lchild:
         node.left = lchild.right
+        if node.left:
+            node.left.father = node
         node.father = lchild
         lchild.father = father
         lchild.right = node
@@ -108,7 +112,7 @@ class Tree:
         # 父节点是红色的
         # 情景4
         while father is not self.root and father and not father.black:  # 在4.1情景下，第二次循坏时，father如果是黑的，也退出。可以和上面情景3合并
-            show_tree(self.root)
+            # show_tree(self.root)
             grandfather = father.father  # type: Node
             is_left = True
             # 找到叔叔节点
@@ -334,3 +338,30 @@ def in_order(node, order_list):
     order_list.append(node.key)
     if node.right:
         in_order(node.right, order_list)
+
+
+# father这个变量有时候不正确
+def check_father(tree):
+    """
+
+    @type tree: Tree
+    """
+    if tree.root:
+        _check_father(tree.root)
+
+
+def _check_father(node):
+    """
+
+    @type node: Node
+    """
+    if node.left:
+        if node.left.father != node:
+            print node.key, node.left.father.key
+            raise FatherErr()
+        _check_father(node.left)
+    if node.right:
+        if node.right.father != node:
+            print node.key, node.right.father.key
+            raise FatherErr()
+        _check_father(node.right)

@@ -12,6 +12,7 @@ class Node:
     black = False  # type: bool
 
     def __init__(self, key=0):
+        self.father = None
         self.key = key
 
     def find(self, key):

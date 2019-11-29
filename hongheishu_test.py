@@ -92,12 +92,35 @@ class MyTestCase(unittest.TestCase):
         tmp = [384, 631, 100, 15, 715, 80, 456, 305, 836, 893, 278, 696, 663, 834, 947, 663, 353, 762, 694, 703, 258, 916, 405, 380, 324, 637, 780, 289, 811, 496, 123, 122, 660, 224, 629, 109, 314, 571, 246, 164, 424, 403, 943, 562, 771, 98, 975, 151, 792, 602, 700, 295, 367, 486, 480, 148, 956, 318, 523, 417, 805, 652, 367, 467, 195, 726, 755, 10, 777, 862, 278, 450, 978, 451, 851, 688, 684, 317, 523, 104, 846, 505, 89, 966, 941, 893, 595, 862, 57, 248, 980, 875, 165, 925, 654, 817, 138, 927, 343, 861]
         for i in tmp:
             print i, tmp.index(i)
-
+            if i == 834:
+                 print
             tree.insert(i)
             show_tree(tree.root)
-            if i == 811:
-                 print
+
+            check_father(tree)
+            self.assertEqual(bst_order(tree), True)
             xingzhijiancha(tree)
+
+    def test_insert5(self):
+        for i in range(100):
+            tree = Tree()
+            tmp = []
+            for i in range(100):
+                tmp.append(random.randint(10, 10000))
+            print tmp
+
+            for i in tmp:
+                # print i
+                tree.insert(i)
+            print "show"
+            if tree.root:
+                show_tree(tree.root)
+            else:
+                self.fail("root is None")
+            check_father(tree)
+            self.assertEqual(bst_order(tree), True)
+            xingzhijiancha(tree)
+            print "xinzhi"
 
 
 if __name__ == '__main__':

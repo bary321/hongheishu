@@ -17,6 +17,10 @@ class HongChild(Exception):
         Exception.__init__(self, err)
 
 
+class FatherErr(Exception):
+    def __init__(self, err="father err"):
+        Exception.__init__(self, err)
+
 
 
 
