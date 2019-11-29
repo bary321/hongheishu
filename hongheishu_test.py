@@ -85,6 +85,7 @@ class MyTestCase(unittest.TestCase):
             tree.insert(i)
             show_tree(tree.root)
         xingzhijiancha(tree)
+        self.assertEqual(bst_order(tree), True)
 
     def test_insert4(self):
         tree = Tree()

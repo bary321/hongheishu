@@ -308,10 +308,29 @@ def get_length(node):
     return length
 
 
-def insert(node, key):
+def bst_order(tree):
+    ol = []
+    if tree.root:
+        in_order(tree.root, ol)
+    print ol
+    length = len(ol)
+    if length > 1:
+        for i in range(length - 1):
+            if ol[i + 1] < ol[i]:
+
+                return False
+    return True
+
+
+# 对树进行中序遍历
+def in_order(node, order_list):
     """
 
-    @type key: int
+    @type order_list: list
     @type node: Node
     """
-    pass
+    if node.left:
+        in_order(node.left, order_list)
+    order_list.append(node.key)
+    if node.right:
+        in_order(node.right, order_list)
