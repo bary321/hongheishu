@@ -76,7 +76,7 @@ def right_double_rotate(node):
     """
     if node.left:
         node.left = left_single_rotate(node.left)
-    return right_double_rotate(node)
+    return right_single_rotate(node)
 
 
 class Tree:
