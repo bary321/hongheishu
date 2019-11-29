@@ -82,8 +82,10 @@ def right_double_rotate(node):
 class Tree:
     root = None  # type: Node
 
-    def __init__(self):
-        pass
+    def __init__(self, key=None):
+        if key is not None:
+            self.root = Node(key)
+            self.root.black = True
 
     def insert(self, key):
         # 根节点为空，直接插入
