@@ -63,8 +63,8 @@ class MyTestCase(unittest.TestCase):
     def test_insert2(self):
         tree = Tree()
         tmp = []
-        for i in range(10):
-            tmp.append(random.randint(10, 100))
+        for i in range(100):
+            tmp.append(random.randint(10, 1000))
         print tmp
 
         for i in tmp:
@@ -82,13 +82,20 @@ class MyTestCase(unittest.TestCase):
         tree = Tree()
         tmp = [71, 96, 73, 27, 64, 82, 79, 26, 73, 78]
         for i in tmp:
-            if i == 73:
-                print
             tree.insert(i)
-        if tree.root:
             show_tree(tree.root)
-        else:
-            self.fail("root is None")
+        xingzhijiancha(tree)
+
+    def test_insert4(self):
+        tree = Tree()
+        tmp = [384, 631, 100, 15, 715, 80, 456, 305, 836, 893, 278, 696, 663, 834, 947, 663, 353, 762, 694, 703, 258, 916, 405, 380, 324, 637, 780, 289, 811, 496, 123, 122, 660, 224, 629, 109, 314, 571, 246, 164, 424, 403, 943, 562, 771, 98, 975, 151, 792, 602, 700, 295, 367, 486, 480, 148, 956, 318, 523, 417, 805, 652, 367, 467, 195, 726, 755, 10, 777, 862, 278, 450, 978, 451, 851, 688, 684, 317, 523, 104, 846, 505, 89, 966, 941, 893, 595, 862, 57, 248, 980, 875, 165, 925, 654, 817, 138, 927, 343, 861]
+        for i in tmp:
+            print i, tmp.index(i)
+
+            tree.insert(i)
+        show_tree(tree.root)
+            # if i == 811:
+            #     print
         xingzhijiancha(tree)
 
 

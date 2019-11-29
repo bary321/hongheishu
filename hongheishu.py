@@ -1,6 +1,7 @@
 # coding:utf-8
 from shu import Node as _Node
 from honghei_err import *
+from shu import show_tree
 
 __author__ = 'bary'
 
@@ -105,9 +106,10 @@ class Tree:
         if father.black:
             return
 
-        # 插入节点是红色的
+        # 父节点是红色的
         # 情景4
-        while father is not self.root and father:
+        while father is not self.root and father and not father.black:  # 在4.1情景下，第二次循坏时，father如果是黑的，也退出。可以和上面情景3合并
+            show_tree(self.root)
             grandfather = father.father  # type: Node
             is_left = True
             # 找到叔叔节点
@@ -171,7 +173,7 @@ class Tree:
                             else:
                                 grandgrandfather.right = left_single_rotate(grandfather)
                         else:
-                            self.root = right_single_rotate(grandfather)
+                            self.root = left_single_rotate(grandfather)
                         break
                     else:
                         # 插入节点在左边
