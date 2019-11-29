@@ -35,7 +35,7 @@ def left_single_rotate(node):
         rchild.left = node
         return rchild
     else:
-        return None
+        return node
 
 
 def right_single_rotate(node):
@@ -97,7 +97,6 @@ class Tree:
             return
         if father.key < key:
             father.right = insert_node
-
         else:
             father.left = insert_node
 
@@ -129,8 +128,6 @@ class Tree:
                 father = grandfather.father
             else:
                 # 叔叔为空或者是黑的
-                # 我认为叔叔必然是空的，否则似乎树不可能满足性质5
-
                 if is_left:
                     # 父节点在左边
                     # 情景4.2
@@ -304,12 +301,10 @@ def get_length(node):
     @type node: Node
     """
     length = 0
-    if node.black:
-        length += 1
-    while node.father:
-        node = node.father
+    while node:
         if node.black:
             length += 1
+        node = node.father
     return length
 
 

@@ -93,10 +93,10 @@ class MyTestCase(unittest.TestCase):
             print i, tmp.index(i)
 
             tree.insert(i)
-        show_tree(tree.root)
-            # if i == 811:
-            #     print
-        xingzhijiancha(tree)
+            show_tree(tree.root)
+            if i == 811:
+                 print
+            xingzhijiancha(tree)
 
 
 if __name__ == '__main__':
