@@ -129,12 +129,13 @@ def delete(node, key):
             return node
 
 
-def show_tree(tree):
+def show_tree(tree, png="shu.png"):
     """
 
+    @param png: str
     @type tree: Node
     """
-    png = "shu.png"
+    png = png
     g = pyg.AGraph()
     _show_tree(tree, g)
     g.layout(prog='dot')  # 绘图类型
