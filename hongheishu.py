@@ -18,9 +18,10 @@ __doc__ = """
 class Node(_Node):
     father = None  # type Node
 
-    def __init__(self, key=0, father=None):
+    def __init__(self, key=0, father=None, debug=False):
         self.key = key
         self.father = father
+        self.debug = debug
 
 
 def left_single_rotate(node):
@@ -286,7 +287,7 @@ class Tree:
                         father.black = False
                         grandfather = father.father
                         if grandfather:
-                            if grandfather is grandfather.left:
+                            if father is grandfather.left:
                                 grandfather.left = left_single_rotate(father)
                             else:
                                 grandfather.right = left_single_rotate(father)

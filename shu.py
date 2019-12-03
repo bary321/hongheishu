@@ -10,10 +10,12 @@ class Node:
     left = None  # type: Node
     right = None  # type: Node
     black = False  # type: bool
+    debug = True   # type: bool
 
-    def __init__(self, key=0):
+    def __init__(self, key=0, debug=True):
         self.father = None
         self.key = key
+        self.debug = True
 
     def find(self, key):
         """
@@ -135,6 +137,8 @@ def show_tree(tree, png="shu.png"):
     @param png: str
     @type tree: Node
     """
+    if not tree.debug:
+        return
     png = png
     g = pyg.AGraph()
     _show_tree(tree, g)
