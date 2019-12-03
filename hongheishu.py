@@ -243,7 +243,7 @@ class Tree:
         # 找到替代节点
 
         ori_replace = node
-        # 先删除，在平衡
+        # 先删除，再平衡
         while ori_replace.left or ori_replace.right:
             if ori_replace.right:
                 ori_replace = ori_replace.right.find_min()
@@ -503,7 +503,7 @@ def bst_order(tree):
     return True
 
 
-# 对树进行中序遍历
+# 对树进行中序遍历， 中序遍历后的list应该是从小到大排好序的
 def in_order(node, order_list):
     """
 
@@ -517,7 +517,7 @@ def in_order(node, order_list):
         in_order(node.right, order_list)
 
 
-# father这个变量有时候不正确
+# 检查father这个变量设置错误
 def check_father(tree):
     """
 
