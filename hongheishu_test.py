@@ -122,6 +122,49 @@ class MyTestCase(unittest.TestCase):
             xingzhijiancha(tree)
             print "xinzhi"
 
+    def test_delete0(self):
+        tree = Tree()
+        tree.insert(49)
+        show_tree(tree.root)
+        tree.delete(49)
+        self.assertIsNone(tree.root)
+
+    def test_delete1(self):
+        tree = Tree()
+        tree.insert(49)
+        tree.insert(52)
+        tree.insert(54)
+        show_tree(tree.root, "bf.png")
+        tree.delete(49)
+        show_tree(tree.root, "af.png")
+        self.assertEqual(tree.root.key, 52)
+        self.assertIsNone(tree.root.left)
+        self.assertEqual(tree.root.right.key, 54)
+        self.assertEqual(tree.root.black, True)
+        self.assertEqual(tree.root.right.black, False)
+
+    def test_delete2_1_1(self):
+        tree = Tree()
+        tmp = [384, 631, 100, 15, 715, 80, 456, 305, 836, 893, 278, 696, 663, 834, 947, 663, 353, 762, 694, 703, 258, 916, 405, 380, 324, 637, 780, 289, 811, 496, 123, 122, 660, 224, 629, 109, 314, 571, 246, 164, 424, 403, 943, 562, 771, 98, 975, 151, 792, 602, 700, 295, 367, 486, 480, 148, 956, 318, 523, 417, 805, 652, 367, 467, 195, 726, 755, 10, 777, 862, 278, 450, 978, 451, 851, 688, 684, 317, 523, 104, 846, 505, 89, 966, 941, 893, 595, 862, 57, 248, 980, 875, 165, 925, 654, 817, 138, 927, 343, 861]
+        for i in tmp:
+            tree.insert(i)
+        show_tree(tree.root)
+
+        tmp.reverse()
+        for i in tmp:
+            print i
+            if i == 916:
+                import pdb
+
+                # pdb.set_trace()
+                pass
+            tree.delete(i)
+            show_tree(tree.root)
+            check_father(tree)
+            self.assertEqual(bst_order(tree), True)
+            xingzhijiancha(tree)
+        self.assertIsNone(tree.root)
+
 
 if __name__ == '__main__':
     unittest.main()

@@ -1,4 +1,6 @@
 # coding:utf-8
+# from typing import Optional, Any
+
 from shu import Node as _Node
 from honghei_err import *
 from shu import show_tree
@@ -216,6 +218,21 @@ class Tree:
         else:
             return None
 
+    def _delete(self, node):
+        """
+
+        @type node: Node
+        """
+
+        father = node.father
+        if father:
+            if father.left is node:
+                father.left = None
+            else:
+                father.right = None
+        else:
+            self.root = None
+
     def delete(self, key):
         # 找到要删除的节点
         node = self.find(key)
@@ -224,48 +241,152 @@ class Tree:
 
         # 找到替代节点
 
-        # 替代节点是红色的
-        # 情景1
+        ori_replace = node
 
-        # 替代节点是黑色的
-        # 情景2
+        while ori_replace.left or ori_replace.right:
+            if ori_replace.right:
+                ori_replace = ori_replace.right.find_min()
+                node.key = ori_replace.key
+                node = ori_replace
+            else:
+                ori_replace = ori_replace.left
 
-            # 替代节点在父节点的左边
-            # 情景2.1
-                # 替换结点的兄弟结点是红色
-                # 情景2.1.1
+        if not ori_replace.black:
+            self._delete(ori_replace)
+            return
 
+        replace = ori_replace
+        while 1:
+            if not replace.black:
+                # 替代节点是红色的
+                # 情景1
+                replace.black = True
+                self._delete(ori_replace)
+                return
+            else:
+                # 替代节点是黑色的
+                # 情景2
+                father = replace.father  # type: Node
+                if not father:
+                    # 父节点是根节点
+                    self._delete(ori_replace)
+                    return
 
-                # 替代节点的兄弟节点是黑色
-                # 情景2.1.2
-                    # 兄弟节点的右节点是红色
-                    # 情景2.1.2.1
+                if father.left is replace:
+                    # 替代节点在父节点的左边
+                    # 情景2.1
+                    brother = father.right
 
-                    # 兄弟节点的右节点是黑色
-                    # 情景2.1.2.2
-                        # 兄弟节点的左节点是红色
-                        # 情景2.1.2.2.1
-                        # 兄弟节点的左节点是黑色
-                        # 情景2.1.2.2.2
+                    if not brother.black:
+                        # 替换结点的兄弟结点是红色
+                        # 情景2.1.1
+                        brother.black = True
+                        father.black = False
+                        grandfather = father.father
+                        if grandfather:
+                            if grandfather is grandfather.left:
+                                grandfather.left = left_single_rotate(father)
+                            else:
+                                grandfather.right = left_single_rotate(father)
+                        else:
+                            self.root = left_single_rotate(father)
+                        continue
+                    else:
+                        # 替代节点的兄弟节点是黑色
+                        # 情景2.1.2
+                        br = brother.right
+                        if br and not br.black:
+                            # 兄弟节点的右节点是红色
+                            # 情景2.1.2.1
+                            brother.black = father.black
+                            father.black = True
+                            br.black = True
+                            grandfather = father.father
+                            if grandfather:
+                                if father is grandfather.left:
+                                    grandfather.left = left_single_rotate(father)
+                                else:
+                                    grandfather.right = left_single_rotate(father)
+                            else:
+                                self.root = left_single_rotate(father)
 
-            # 替代节点在父节点的右边
-            # 情景2.2
-                # 替换结点的兄弟结点是红色
-                # 情景2.2.1
+                            self._delete(ori_replace)
+                            return
+                        else:
+                            # 兄弟节点的右节点是黑色
+                            # 情景2.1.2.2
+                            bl = brother.left
+                            if bl and not bl.black:
+                                # 兄弟节点的左节点是红色
+                                # 情景2.1.2.2.1
+                                brother.black = False
+                                bl.black = True
+                                father.right = right_single_rotate(brother)
+                                continue
+                            else:
+                                # 兄弟节点的左节点是黑色
+                                # 情景2.1.2.2.2
+                                brother.black = False
+                                replace = father
+                                continue
+                else:
+                    # 替代节点在父节点的右边
+                    # 情景2.2
+                    brother = father.left
+                    if not brother.black:
+                        # 替换结点的兄弟结点是红色
+                        # 情景2.2.1
+                        brother.black = True
+                        father.black = False
+                        grandfather = father.father
+                        if grandfather:
+                            if father is grandfather.left:
+                                grandfather.left = right_single_rotate(father)
+                            else:
+                                grandfather.right = right_single_rotate(father)
+                        else:
+                            self.root = right_single_rotate(father)
+                        continue
+                    else:
+                        # 替代节点的兄弟节点是黑色
+                        # 情景2.2.2
+                        bl = brother.left
+                        if bl and not bl.black:
+                            # 兄弟节点的左节点是红色
+                            # 情景2.2.2.1
+                            brother.black = father.black
+                            father.black = True
+                            bl.black = True
+                            grandfather = father.father
+                            if grandfather:
+                                if father is grandfather.left:
+                                    grandfather.left = right_single_rotate(father)
+                                else:
+                                    grandfather.right = right_single_rotate(father)
+                            else:
+                                self.root = right_single_rotate(father)
 
-                # 替代节点的兄弟节点是黑色
-                # 情景2.2.2
-                # 兄弟节点的右节点是红色
-                # 情景2.2.2.1
+                            self._delete(ori_replace)
+                            return
+                        else:
+                            # 兄弟节点的左节点是黑色
+                            # 情景2.2.2.2
+                            br = brother.right
+                            if br and not br.black:
+                                # 兄弟节点的右节点是红色
+                                # 情景2.2.2.2.1
+                                brother.black = False
+                                br.black = True
+                                father.left = left_single_rotate(brother)
+                                continue
+                            else:
+                                # 兄弟节点的右节点是黑色
+                                # 情景2.1.2.2.2
+                                brother.black = False
+                                replace = father
+                                continue
 
-                # 兄弟节点的右节点是黑色
-                # 情景2.2.2.2
-                    # 兄弟节点的左节点是红色
-                    # 情景2.2.2.2.1
-                    # 兄弟节点的左节点是黑色
-                    # 情景2.2.2.2.1
-
-        pass
+            pass
 
 
 # 用来检查红黑树是否满足性质
@@ -374,7 +495,7 @@ def bst_order(tree):
     if length > 1:
         for i in range(length - 1):
             if ol[i + 1] < ol[i]:
-
+                print ol[i], ol[i+1]
                 return False
     return True
 
