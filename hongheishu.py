@@ -242,7 +242,7 @@ class Tree:
         # 找到替代节点
 
         ori_replace = node
-
+        # 先删除，在平衡
         while ori_replace.left or ori_replace.right:
             if ori_replace.right:
                 ori_replace = ori_replace.right.find_min()
@@ -250,6 +250,8 @@ class Tree:
                 node = ori_replace
             else:
                 ori_replace = ori_replace.left
+
+        node.key = ori_replace.key
 
         if not ori_replace.black:
             self._delete(ori_replace)
@@ -490,11 +492,11 @@ def bst_order(tree):
     ol = []
     if tree.root:
         in_order(tree.root, ol)
-    print ol
     length = len(ol)
     if length > 1:
         for i in range(length - 1):
             if ol[i + 1] < ol[i]:
+                print ol
                 print ol[i], ol[i+1]
                 return False
     return True
